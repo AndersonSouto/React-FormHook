@@ -1,16 +1,28 @@
-import React, { useState } from "react";
-import AdressInformation from "./AdressInformation";
+import React, { useEffect, useState } from "react";
+import AddressInformation from "./AddressInformation";
+import DataReview from "./DataReview";
 import UserData from "./UserData";
+import UserInfo from './UserInfo'
 
-function RegistrationForm() {
+function RegistrationForm({getData}) {
   const [data, setData] = useState({});
   const [actualStep, setActualStep] = useState(0);
 
-  const formPages = [<UserData whenSend={colectData} />, <AdressInformation whenSend={colectData} />];
+  useEffect (() => {
+    if (actualStep === formPages.length -1) console.log(data)
+  }, [data])
+  
 
-  function colectData({ newData }) {
+  const formPages = [<UserData whenSend={colectData} />, <UserInfo whenSend={colectData} />, <AddressInformation whenSend={colectData} />, <DataReview data={data} restartForm={restartForm} /> ];
+
+  function colectData(newData) {
     setData({...data, ...newData});
     next();
+  }
+
+  function restartForm() {
+    setActualStep(0);
+    setData({});
   }
 
   function next() {
